@@ -1,8 +1,8 @@
-from Choice import Choice
+from Choice.Choice import Choice
 from Item import Item
 from Inventory import Inventory
-from Rarity import Rarity
-from Type import Type
+from Enum_Classes.Rarity import Rarity
+from Enum_Classes.Type import Type
 import uuid
 
 class ItemChoice(Choice):

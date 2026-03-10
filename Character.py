@@ -1,5 +1,5 @@
 from Inventory import Inventory
-from Class import Class
+from Enum_Classes.Class import Class
 import uuid
 
 class Character:

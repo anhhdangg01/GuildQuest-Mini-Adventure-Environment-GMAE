@@ -1,4 +1,4 @@
-from Choice import Choice
+from Choice.Choice import Choice
 from WorldClockTime import WorldClockTime
 from QuestEvent import QuestEvent
 import uuid

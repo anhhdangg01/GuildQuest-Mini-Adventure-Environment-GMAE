@@ -1,4 +1,4 @@
-from Choice import Choice
+from Choice.Choice import Choice
 from User import User
 import uuid
 

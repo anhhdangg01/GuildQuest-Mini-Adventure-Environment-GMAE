@@ -1,4 +1,4 @@
-from ChoiceUI import ChoiceUI
+from Choice.ChoiceUI import ChoiceUI
 
 def main() -> None:
     choiceUI = ChoiceUI()

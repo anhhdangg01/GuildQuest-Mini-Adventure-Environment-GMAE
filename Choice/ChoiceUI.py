@@ -1,8 +1,8 @@
-from Choice import Choice
-from UserChoice import UserChoice
-from RealmChoice import RealmChoice
-from CharacterChoice import CharacterChoice
-from QuestEventChoice import QuestEventChoice
+from Choice.Choice import Choice
+from Choice.UserChoice import UserChoice
+from Choice.RealmChoice import RealmChoice
+from Choice.CharacterChoice import CharacterChoice
+from Choice.QuestEventChoice import QuestEventChoice
 from UserData import UserData
 from User import User
 

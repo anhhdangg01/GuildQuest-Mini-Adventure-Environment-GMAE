@@ -1,4 +1,4 @@
-from Choice import Choice
+from Choice.Choice import Choice
 from Realm import Realm
 from MapIdentity import MapIdentity
 import uuid
