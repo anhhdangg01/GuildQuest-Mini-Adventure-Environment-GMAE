@@ -1,4 +1,4 @@
-from Enum_Classes.EntityType import EntityType
+from enums.entity_type import EntityType
 
 class Entity():
     def __init__(self, name: str, type: EntityType):

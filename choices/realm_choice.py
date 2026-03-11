@@ -1,6 +1,6 @@
-from Choice.Choice import Choice
-from Realm import Realm
-from MapIdentity import MapIdentity
+from choices.choice import Choice
+from realm import Realm
+from map_identity import MapIdentity
 import uuid
 
 class RealmChoice(Choice):

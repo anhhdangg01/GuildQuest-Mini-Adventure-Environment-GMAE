@@ -1,9 +1,9 @@
-from Inventory import Inventory
-from Enum_Classes.Class import Class
+from inventory import Inventory
+from enums.character_class import CharacterClass
 import uuid
 
 class Character:
-    def __init__(self, id: str, name: str, charClass: Class, level: int):
+    def __init__(self, id: str, name: str, charClass: CharacterClass, level: int):
         self.id = id
         self.name = name
         self.charclass = charClass
@@ -16,7 +16,7 @@ class Character:
     def rename(self, newName: str) -> None:
         self.name = newName
 
-    def changeClass(self, newClass: Class) -> None:
+    def changeClass(self, newClass: CharacterClass) -> None:
         self.charClass = newClass
 
     def setLevel(self, newLevel: int) -> None:

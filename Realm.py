@@ -1,4 +1,4 @@
-from MapIdentity import MapIdentity
+from map_identity import MapIdentity
 
 class Realm:
     def __init__(self, id: str, name: str, mapIdentity: MapIdentity, description:str=""):

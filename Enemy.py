@@ -1,5 +1,5 @@
-from NPC import NPC
-from Enum_Classes.EntityType import EntityType
+from npc import NPC
+from enums.entity_type import EntityType
 
 class Enemy(NPC):
     def __init__(self, name: str, type: EntityType):
