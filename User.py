@@ -1,7 +1,12 @@
+from Achievement import Achievement
+from typing import List
+
 class User:
     def __init__(self, id: str, username: str):
         self.id = id
         self.username = username
+        self.achievements: List[Achievement] = []
+        self.profile = None
         self.mAdventures = {}
         self.characters = {}
 
@@ -22,3 +27,9 @@ class User:
             self.mAdventures.pop(name)
         else:
             print("> That campaign does not exist!\n")
+
+    def add_achievement(self, achievement: Achievement):
+        self.achievements.append(achievement)
+
+    def get_achievements(self):
+        return self.achievements
