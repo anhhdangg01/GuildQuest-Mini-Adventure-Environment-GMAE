@@ -1,6 +1,6 @@
 from enum import Enum
 
-class Class(Enum):
+class CharacterClass(Enum):
     WARRIOR = 1
     THIEF = 2
     MAGE = 3

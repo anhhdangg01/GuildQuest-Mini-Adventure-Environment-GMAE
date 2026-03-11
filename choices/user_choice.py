@@ -1,5 +1,5 @@
-from Choice.Choice import Choice
-from User import User
+from choices.choice import Choice
+from models.user import User
 import uuid
 
 class UserChoice(Choice):

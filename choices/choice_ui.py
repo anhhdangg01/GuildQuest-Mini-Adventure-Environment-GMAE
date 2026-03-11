@@ -1,10 +1,10 @@
-from Choice.Choice import Choice
-from Choice.UserChoice import UserChoice
-from Choice.RealmChoice import RealmChoice
-from Choice.CharacterChoice import CharacterChoice
-from Choice.QuestEventChoice import QuestEventChoice
-from UserData import UserData
-from User import User
+from choices.choice import Choice
+from choices.user_choice import UserChoice
+from choices.realm_choice import RealmChoice
+from choices.character_choice import CharacterChoice
+from choices.quest_event_choice import QuestEventChoice
+from models.user_data import UserData
+from models.user import User
 
 class ChoiceUI(Choice):
     _instance = None

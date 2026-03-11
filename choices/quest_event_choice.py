@@ -1,6 +1,6 @@
-from Choice.Choice import Choice
-from WorldClockTime import WorldClockTime
-from QuestEvent import QuestEvent
+from choices.choice import Choice
+from models.world_clock_time import WorldClockTime
+from models.quest_event import QuestEvent
 import uuid
 
 class QuestEventChoice(Choice):

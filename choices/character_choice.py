@@ -1,9 +1,9 @@
-from Choice.Choice import Choice
-from Enum_Classes.Class import Class
-from Character import Character
-from Choice.ItemChoice import ItemChoice
-from Inventory import Inventory
-from User import User
+from choices.choice import Choice
+from enums.character_class import CharacterClass
+from models.character import Character
+from choices.item_choice import ItemChoice
+from models.inventory import Inventory
+from models.user import User
 from typing import Callable
 import uuid
 
@@ -56,20 +56,20 @@ class CharacterChoice(Choice):
         print("* (5) Priest")
 
     @staticmethod
-    def getCharacterClass() -> Class:
+    def getCharacterClass() -> CharacterClass:
         charClassChoiceNumber = Choice.getIntInput()
-        charClass = Class.PRIEST
+        charClass = CharacterClass.PRIEST
 
         match (charClassChoiceNumber):
-            case Class.WARRIOR.value:
-                charClass = Class.WARRIOR
-            case Class.THIEF.value:
-                charClass = Class.THIEF
-            case Class.MAGE.value:
-                charClass = Class.MAGE
-            case Class.ARCHER.value:
-                charClass = Class.ARCHER
-            case Class.PRIEST.value:
+            case CharacterClass.WARRIOR.value:
+                charClass = CharacterClass.WARRIOR
+            case CharacterClass.THIEF.value:
+                charClass = CharacterClass.THIEF
+            case CharacterClass.MAGE.value:
+                charClass = CharacterClass.MAGE
+            case CharacterClass.ARCHER.value:
+                charClass = CharacterClass.ARCHER
+            case CharacterClass.PRIEST.value:
                 pass
             case _:
                 raise ValueError()

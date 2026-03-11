@@ -1,6 +1,6 @@
-from Entity import Entity
-from Item import Item
-from Vendor import Vendor
+from entity import Entity
+from item import Item
+from vendor import Vendor
 
 class Player(Entity):
     def __init__(self):
