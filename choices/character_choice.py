@@ -1,9 +1,9 @@
 from choices.choice import Choice
 from enums.character_class import CharacterClass
-from character import Character
+from models.character import Character
 from choices.item_choice import ItemChoice
-from inventory import Inventory
-from user import User
+from models.inventory import Inventory
+from models.user import User
 from typing import Callable
 import uuid
 

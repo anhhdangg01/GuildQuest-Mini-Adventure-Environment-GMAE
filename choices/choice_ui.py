@@ -3,8 +3,8 @@ from choices.user_choice import UserChoice
 from choices.realm_choice import RealmChoice
 from choices.character_choice import CharacterChoice
 from choices.quest_event_choice import QuestEventChoice
-from user_data import UserData
-from user import User
+from models.user_data import UserData
+from models.user import User
 
 class ChoiceUI(Choice):
     _instance = None
