@@ -1,5 +1,4 @@
 # profile.py
-from typing import Dict, List
 
 class Profile:
 
@@ -9,10 +8,10 @@ class Profile:
         self.inventorySnapShot = inventory_snapshot
 
         # Map<WorldClockTime, QuestEvent>
-        self.questHistory: Dict = {}
+        self.questHistory= {}
 
         # List<Achievement>
-        self.achievements: List = []
+        self.achievements= []
 
     # changePreferredRealm(Realm realm): void
     def changePreferredRealm(self, realm):
