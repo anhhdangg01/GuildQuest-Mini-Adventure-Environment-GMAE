@@ -1,7 +1,7 @@
 from models.entity import Entity
 from models.realm import Realm
 from enums.status import Status
-from models.Achievement import Achievement
+from models.achievement import Achievement
 
 class User:
     def __init__(self, id: str, username: str):

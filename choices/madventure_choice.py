@@ -12,14 +12,9 @@ from enums.status import Status
 class MAdventureChoice(Choice):
     ADD_MADVENTURE = 1
     REMOVE_MADVENTURE = 2
-    CHANGE_REALM = 3
-    ADD_ENTITY = 4
-    ADD_RULE = 5
-    ADD_OBJECTIVE = 6
-    CHANGE_STATUS = 7
-    JOIN_MADVENTURE = 8
-    QUEST_EVENTS = 9
-    RETURN = 10
+    JOIN_MADVENTURE = 3
+    QUEST_EVENTS = 4
+    RETURN = 5
 
     NPC = 1
     ITEM = 2
@@ -48,14 +43,9 @@ class MAdventureChoice(Choice):
         print("> What would you like to do with mini-adventures? Type the number of one of the following:")
         print("* (1) Add mini-adventure")
         print("* (2) Remove mini-adventure")
-        print("* (3) Change realm of mini-adventure")
-        print("* (4) Add entity to mini-adventure")
-        print("* (5) Add rule to mini-adventure")
-        print("* (6) Add objective mini-adventure")
-        print("* (7) Change status of mini-adventure")
-        print("* (8) Join mini-adventure")
-        print("* (9) Quest events")
-        print("* (10) Return")
+        print("* (3) Join mini-adventure")
+        print("* (4) Quest events")
+        print("* (5) Return")
 
     @staticmethod
     def print_entity_type_choices() -> None:
@@ -115,17 +105,6 @@ class MAdventureChoice(Choice):
                     case MAdventureChoice.REMOVE_MADVENTURE:
                         mAdventures = choiceUI.userData.mAdventures
                         MAdventureChoice.remove_madventure(mAdventures, user)
-                    case MAdventureChoice.CHANGE_REALM:
-                        realms = choiceUI.userData.realms
-                        MAdventureChoice.change_realm(realms, user)
-                    case MAdventureChoice.ADD_ENTITY:
-                        MAdventureChoice.add_entity(user)
-                    case MAdventureChoice.ADD_RULE:
-                        MAdventureChoice.add_rule(user)
-                    case MAdventureChoice.ADD_OBJECTIVE:
-                        MAdventureChoice.add_objective(user)
-                    case MAdventureChoice.CHANGE_STATUS:
-                        MAdventureChoice.change_status(user)
                     case MAdventureChoice.JOIN_MADVENTURE:
                         MAdventureChoice.play_madventure(choiceUI, user)
                     case MAdventureChoice.QUEST_EVENTS:
