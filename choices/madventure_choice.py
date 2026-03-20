@@ -48,21 +48,6 @@ class MAdventureChoice(Choice):
         print("* (5) Return")
 
     @staticmethod
-    def print_entity_type_choices() -> None:
-        print("> What would you like to do with mini-adventures? Type an integer:")
-        print("* (1) NPC")
-        print("* (2) Item")
-        print("* (3) Hazard")
-
-    @staticmethod
-    def print_status_choices() -> None:
-        print("> What do you want to set the mini-adventure's status as? Choose an integer:")
-        print("* (1) Win")
-        print("* (2) Lose")
-        print("* (3) Progressing")
-        print("* (4) Complete")
-
-    @staticmethod
     def print_madventure_type_choices() -> None:
         print("> What kind of mini-adventure do you want to create?")
         print("* (1) Generic mini-adventure")
