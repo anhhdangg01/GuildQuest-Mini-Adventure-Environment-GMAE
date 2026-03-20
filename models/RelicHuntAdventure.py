@@ -22,11 +22,6 @@ class RelicHuntAdventure(MiniAdventure):
         super().__init__(name, description, realm, Status.PROGRESSING)
 
         self.mode = mode.lower()
-        self.name = "Relic Hunt"
-        self.description = (
-            "Two players explore the realm, collect relics, and avoid hazards."
-        )
-
         self.target_relics = target_relics
         self.width = int(realm.mapIdentity.x)
         self.height = int(realm.mapIdentity.y)
@@ -57,6 +52,9 @@ class RelicHuntAdventure(MiniAdventure):
         self._validate_realm_size()
         self._setup_entities()
 
+    def run(self):
+        self.play()
+
     def get_name(self) -> str:
         if self.mode == "coop":
             return f"{self.name} (Co-Op)"
@@ -78,16 +76,15 @@ class RelicHuntAdventure(MiniAdventure):
 
     def _advance_turn(self) -> None:
         self.current_turn_index = (self.current_turn_index + 1) % len(self.turn_order)
-        print(f"Turn order swapped. It is now {self.get_current_player()}'s turn.")
+        print(f"> It is now {self.get_current_player()}'s turn.\n")
 
     def _validate_realm_size(self) -> None:
         total_tiles = self.width * self.height
-        required_tiles = 7
+        required_tiles = 7  # 2 players + 2 relics + 3 hazards
 
         if total_tiles < required_tiles:
             raise ValueError(
-                "This realm is too small for Relic Hunt. "
-                "Players must choose a bigger realm."
+                "This realm is too small for Relic Hunt. Players must choose a bigger realm."
             )
 
     def _generate_random_positions(self, count: int, blocked_positions=None) -> list:
@@ -103,8 +100,7 @@ class RelicHuntAdventure(MiniAdventure):
 
         if count > len(available_positions):
             raise ValueError(
-                "Not enough open tiles in this realm. "
-                "Players must choose a bigger realm."
+                "Not enough open tiles in this realm. Players must choose a bigger realm."
             )
 
         return random.sample(available_positions, count)
@@ -155,16 +151,37 @@ class RelicHuntAdventure(MiniAdventure):
         for i in range(len(hazards)):
             self.hazard_positions[hazard_tiles[i]] = hazards[i]
 
-    def move_player(self, player_name: str, direction: str) -> None:
+    def _normalize_direction(self, direction: str):
+        direction = direction.strip().lower()
+
+        mapping = {
+            "w": "up",
+            "a": "left",
+            "s": "down",
+            "d": "right",
+            "up": "up",
+            "left": "left",
+            "down": "down",
+            "right": "right",
+        }
+
+        return mapping.get(direction)
+
+    def move_player(self, player_name: str, direction: str) -> bool:
         if self.status != Status.PROGRESSING:
-            return
+            return False
 
         if player_name not in self.players:
-            return
+            return False
 
         if player_name != self.get_current_player():
-            print(f"It is not {player_name}'s turn.")
-            return
+            print(f"> It is not {player_name}'s turn.")
+            return False
+
+        direction = self._normalize_direction(direction)
+        if direction is None:
+            print("> Invalid move. Use w/a/s/d or up/down/left/right.")
+            return False
 
         x, y = self.players[player_name]["position"]
 
@@ -177,8 +194,8 @@ class RelicHuntAdventure(MiniAdventure):
         elif direction == "right" and x < self.width - 1:
             x += 1
         else:
-            print("Invalid move direction.")
-            return
+            print("> You cannot move outside the realm.")
+            return False
 
         self.players[player_name]["position"] = [x, y]
         self._check_tile(player_name)
@@ -187,6 +204,8 @@ class RelicHuntAdventure(MiniAdventure):
         if self.status == Status.PROGRESSING:
             self._advance_turn()
 
+        return True
+
     def _check_tile(self, player_name: str) -> None:
         pos = tuple(self.players[player_name]["position"])
 
@@ -194,15 +213,15 @@ class RelicHuntAdventure(MiniAdventure):
             relic = self.relic_positions.pop(pos)
             self.players[player_name]["relics"] += 1
             self.team_relics += 1
-            print(f"{player_name} collected {relic.get_name()}!")
+            print(f"> {player_name} collected {relic.get_name()}!")
 
             if self.mode == "coop":
-                print(f"Team relic total: {self.team_relics}/{self.target_relics}")
+                print(f"> Team relic total: {self.team_relics}/{self.target_relics}")
 
         if pos in self.hazard_positions:
             hazard = self.hazard_positions[pos]
             hazard.trigger()
-            print(f"{player_name} triggered {hazard.get_name()}!")
+            print(f"> {player_name} triggered {hazard.get_name()}!")
 
         self._check_win_condition()
 
@@ -210,56 +229,68 @@ class RelicHuntAdventure(MiniAdventure):
         if self.mode == "coop":
             if self.team_relics >= self.target_relics:
                 self.status = Status.WIN
-                print("Both players win the Co-Op Relic Hunt!")
+                print("> Both players win the Co-Op Relic Hunt!")
                 return
         else:
             for current_player_name, data in self.players.items():
                 if data["relics"] >= self.target_relics:
                     self.status = Status.WIN
-                    print(f"{current_player_name} wins Relic Hunt!")
+                    print(f"> {current_player_name} wins Relic Hunt!")
                     return
 
         if len(self.relic_positions) == 0:
             self.status = Status.COMPLETE
-            print("All relics have been collected. The mini-adventure is complete.")
+            print("> All relics have been collected. The mini-adventure is complete.")
 
-    def print_ascii_grid(self) -> None:
-        print("\n=== Realm Grid ===")
+    def print_scores(self) -> None:
+        print("> Current scores:")
+        print(f"  Player 1 relics: {self.players['Player 1']['relics']}")
+        print(f"  Player 2 relics: {self.players['Player 2']['relics']}")
+        if self.mode == "coop":
+            print(f"  Team relic total: {self.team_relics}/{self.target_relics}")
+        print()
 
-        player_1_pos = tuple(self.players["Player 1"]["position"])
-        player_2_pos = tuple(self.players["Player 2"]["position"])
+    def play(self) -> None:
+        self.reset()
 
-        for y in range(self.height):
-            row = []
-            for x in range(self.width):
-                pos = (x, y)
+        print(f"\n=== {self.get_name()} ===")
+        print(self.get_description())
+        print("> Controls: w/a/s/d or up/down/left/right")
+        print("> Type 'quit' to leave the mini-adventure.")
+        print("> Type 'state' to print the current state.\n")
 
-                if pos == player_1_pos and pos == player_2_pos:
-                    row.append("[B]")
-                elif pos == player_1_pos:
-                    row.append("[1]")
-                elif pos == player_2_pos:
-                    row.append("[2]")
-                elif pos in self.relic_positions:
-                    row.append("[R]")
-                elif pos in self.hazard_positions:
-                    hazard_name = self.hazard_positions[pos].get_name()
-                    if hazard_name == "Spike Trap":
-                        row.append("[T]")
-                    elif hazard_name == "Wall":
-                        row.append("[W]")
-                    elif hazard_name == "Pit":
-                        row.append("[P]")
-                    else:
-                        row.append("[H]")
-                else:
-                    row.append("[ ]")
-            print("".join(row))
+        self.print_scores()
 
-        print(
-            "Legend: [1]=Player 1  [2]=Player 2  [R]=Relic  "
-            "[T]=Spike Trap  [W]=Wall  [P]=Pit\n"
-        )
+        while self.status == Status.PROGRESSING:
+            current_player = self.get_current_player()
+            x, y = self.players[current_player]["position"]
+
+            print(f"> {current_player}'s turn.")
+            print(f"> Current position: ({x}, {y})")
+            print("> Enter your move:")
+
+            user_input = input().strip().lower()
+
+            if user_input == "quit":
+                print("> Leaving Relic Hunt...\n")
+                return
+
+            if user_input == "state":
+                print(self.get_state())
+                print()
+                continue
+
+            moved = self.move_player(current_player, user_input)
+
+            if moved:
+                self.print_scores()
+
+        if self.status == Status.WIN:
+            print("> Relic Hunt ended with a win state.\n")
+        elif self.status == Status.COMPLETE:
+            print("> Relic Hunt ended because all relics were collected.\n")
+        elif self.status == Status.LOSE:
+            print("> Relic Hunt ended with a loss state.\n")
 
     def get_player_position(self, player_name: str):
         return self.players[player_name]["position"]
@@ -272,7 +303,7 @@ class RelicHuntAdventure(MiniAdventure):
             "name": self.get_name(),
             "description": self.get_description(),
             "mode": self.mode,
-            "realm": self.realm.name,
+            "realm": self.realm.get_name(),
             "status": self.status.name,
             "current_player": self.get_current_player(),
             "players": self.players,
@@ -315,3 +346,41 @@ class RelicHuntAdventure(MiniAdventure):
         self._validate_realm_size()
         self._setup_entities()
         self.print_ascii_grid()
+
+    def print_ascii_grid(self) -> None:
+        print("\n=== Realm Grid ===")
+
+        player_1_pos = tuple(self.players["Player 1"]["position"])
+        player_2_pos = tuple(self.players["Player 2"]["position"])
+
+        for y in range(self.height):
+            row = []
+            for x in range(self.width):
+                pos = (x, y)
+
+                if pos == player_1_pos and pos == player_2_pos:
+                    row.append("[B]")
+                elif pos == player_1_pos:
+                    row.append("[1]")
+                elif pos == player_2_pos:
+                    row.append("[2]")
+                elif pos in self.relic_positions:
+                    row.append("[R]")
+                elif pos in self.hazard_positions:
+                    hazard_name = self.hazard_positions[pos].get_name()
+                    if hazard_name == "Spike Trap":
+                        row.append("[T]")
+                    elif hazard_name == "Wall":
+                        row.append("[W]")
+                    elif hazard_name == "Pit":
+                        row.append("[P]")
+                    else:
+                        row.append("[H]")
+                else:
+                    row.append("[ ]")
+            print("".join(row))
+
+        print(
+            "Legend: [1]=Player 1  [2]=Player 2  [R]=Relic  "
+            "[T]=Spike Trap  [W]=Wall  [P]=Pit\n"
+        )
