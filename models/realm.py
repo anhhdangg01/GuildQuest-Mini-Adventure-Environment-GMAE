@@ -1,4 +1,4 @@
-from map_identity import MapIdentity
+from models.map_identity import MapIdentity
 
 class Realm:
     def __init__(self, id: str, name: str, mapIdentity: MapIdentity, description: str = "", local_time_offset: int = 0):

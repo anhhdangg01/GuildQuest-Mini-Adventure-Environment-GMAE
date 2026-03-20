@@ -1,6 +1,7 @@
 from choices.choice import Choice
 from models.world_clock_time import WorldClockTime
 from models.quest_event import QuestEvent
+from models.mini_adventure import MiniAdventure
 import uuid
 
 class QuestEventChoice(Choice):
@@ -10,7 +11,7 @@ class QuestEventChoice(Choice):
     RETURN = 4
 
     @staticmethod
-    def printQuestEventChoices() -> None:
+    def print_quest_event_choices() -> None:
         print("> What would you like to do with your quest events? Type the number:")
         print("* (1) Add a new quest event")
         print("* (2) Remove an existing quest event")
@@ -18,33 +19,33 @@ class QuestEventChoice(Choice):
         print("* (4) Return")
 
     @staticmethod
-    def getQuestEventChoice(campaign) -> None:
-        QuestEventChoice.printQuestEventChoices()
+    def get_quest_event_choice(mAdventure: MiniAdventure) -> None:
+        QuestEventChoice.print_quest_event_choices()
         choice = Choice.getStringInput()
 
         try:
             while (int(choice) != QuestEventChoice.RETURN):
                 match (int(choice)):
                     case QuestEventChoice.ADD_QUEST_EVENT:
-                        QuestEventChoice.createQuestEvent(campaign)
+                        QuestEventChoice.create_quest_event(mAdventure)
                     case QuestEventChoice.REMOVE_QUEST_EVENT:
-                        QuestEventChoice.removeQuestEvent(campaign)
+                        QuestEventChoice.remove_quest_event(mAdventure)
                     case QuestEventChoice.UPDATE_QUEST_EVENT:
-                        QuestEventChoice.updateQuestEvent(campaign)
+                        QuestEventChoice.updateQuestEvent(mAdventure)
                     case _:
                         print("> Invalid input! Try again!\n")
 
-                QuestEventChoice.printQuestEventChoices()
+                QuestEventChoice.print_quest_event_choices()
                 choice = Choice.getStringInput()
         except ValueError:
             print("> Your input is not a number!\n")
 
     @staticmethod
-    def createQuestEvent(campaign) -> None:
+    def create_quest_event(mAdventure: MiniAdventure) -> None:
         print("> Please enter your quest event title: ")
         title = Choice.getStringInput()
 
-        if (title in campaign.getQuestEvents()):
+        if (title in mAdventure.get_quest_events()):
             print("> That quest event already exists!" + "\n")
             return
 
@@ -70,27 +71,27 @@ class QuestEventChoice(Choice):
         startTime = WorldClockTime(days, hours, minutes)
 
         questEvent = QuestEvent(uuid.uuid4(), title, startTime)
-        campaign.addQuestEvent(title, questEvent)
+        mAdventure.add_quest_event(title, questEvent)
 
-        print("> New Campaign created!" + "\n")
+        print("> New quest event created!" + "\n")
 
     @staticmethod
-    def removeQuestEvent(campaign) -> None:
+    def remove_quest_event(mAdventure: MiniAdventure) -> None:
         print("> What is the title of the quest event you want to remove?")
         title = Choice.getStringInput()
 
-        if (title in campaign.getQuestEvents()):
-            campaign.removeQuestEvent(title)
+        if (title in mAdventure.get_quest_events()):
+            mAdventure.remove_quest_event(title)
             print("> Quest event removed!\n")
         else:
             print("> That quest event does not exist!\n")
 
     @staticmethod
-    def updateQuestEvent(campaign) -> None:
+    def updateQuestEvent(mAdventure: MiniAdventure) -> None:
         print("> What is the title of the quest event you want to update?")
         questEventTitle = Choice.getStringInput()
 
-        if (questEventTitle in campaign.getQuestEvents()):
+        if (questEventTitle in mAdventure.get_quest_events()):
             print("> Please enter your new quest event title: ")
             newTitle = Choice.getStringInput()
 
@@ -113,7 +114,7 @@ class QuestEventChoice(Choice):
                 print("> Your input is not an integer!\n")
                 return
 
-            questEvent = campaign.getQuestEvents()[questEventTitle]
+            questEvent = mAdventure.get_quest_events()[questEventTitle]
 
             print("> Would you like to update the end time? (Y/N): ")
             choice = Choice.getStringInput()

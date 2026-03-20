@@ -1,11 +1,12 @@
-from Achievement import Achievement
-from typing import List
+from models.entity import Entity
+from enums.status import Status
+from models.achievement import Achievement
 
 class User:
     def __init__(self, id: str, username: str):
         self.id = id
         self.username = username
-        self.achievements: List[Achievement] = []
+        self.achievements: list[Achievement] = []
         self.profile = None
         self.mAdventures = {}
         self.characters = {}
@@ -27,6 +28,35 @@ class User:
             self.mAdventures.pop(name)
         else:
             print("> That campaign does not exist!\n")
+
+    def get_quest_events(self) -> dict:
+        return self.quest_events
+    
+    def add_quest_event(self, title, quest_event) -> None:
+        self.quest_events[title] = quest_event
+
+    def remove_quest_event(self, title) -> None:
+        self.quest_events.pop(title)
+
+    def add_entity(self, mAdventure: str, entity: Entity) -> None:
+        mAdventures = self.getMAdventures()
+        ma = mAdventures[mAdventure]
+        ma.add_entity(entity)
+        
+    def add_rule(self, mAdventure: str, name: str, description: str="") -> None:
+        mAdventures = self.getMAdventures()
+        ma = mAdventures[mAdventure]
+        ma.add_rule(name, description)
+
+    def add_objective(self, mAdventure: str, name: str, description: str="") -> None:
+        mAdventures = self.getMAdventures()
+        ma = mAdventures[mAdventure]
+        ma.add_objective(name, description)
+
+    def change_status(self, mAdventure: str, status: Status) -> None:
+        mAdventures = self.getMAdventures()
+        ma = mAdventures[mAdventure]
+        ma.change_status(status)
 
     def add_achievement(self, achievement: Achievement):
         self.achievements.append(achievement)

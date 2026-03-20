@@ -1,4 +1,4 @@
-from world_clock_time import WorldClockTime
+from models.world_clock_time import WorldClockTime
 
 class QuestEvent:
     def __init__(self, id: str, title: str, startTime: WorldClockTime, endTime:WorldClockTime=None):

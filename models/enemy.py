@@ -1,4 +1,4 @@
-from npc import NPC
+from models.npc import NPC
 from enums.entity_type import EntityType
 
 class Enemy(NPC):

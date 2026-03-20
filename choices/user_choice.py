@@ -3,7 +3,7 @@ from models.user import User
 import uuid
 
 class UserChoice(Choice):
-    CAMPAIGNS = 1
+    MINI_ADVENTURES = 1
     CHARACTERS = 2
     REALMS = 3
     LOGOUT = 4
@@ -11,7 +11,7 @@ class UserChoice(Choice):
     @staticmethod
     def printUserChoices() -> None:
         print("> What would you like to do? Type the number of one of the following:")
-        print("* (1) Mini Adventures (WIP)")
+        print("* (1) Mini Adventures (add a realm first!)")
         print("* (2) Characters")
         print("* (3) Realms")
         print("* (4) Logout")
@@ -37,8 +37,8 @@ class UserChoice(Choice):
         try:
             while (int(choice) != UserChoice.LOGOUT):
                 match (int(choice)):
-                    # case UserChoice.CAMPAIGNS.value:
-                    #     choiceUI.getCampaignChoice(user)
+                    case UserChoice.MINI_ADVENTURES:
+                        choiceUI.getMAdventureChoice(user)
                     case UserChoice.CHARACTERS:
                         choiceUI.getCharacterChoice(user)
                     case UserChoice.REALMS:

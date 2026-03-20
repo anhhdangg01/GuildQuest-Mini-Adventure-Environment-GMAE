@@ -1,4 +1,4 @@
-from entity import Entity
+from models.entity import Entity
 from enums.entity_type import EntityType
 
 class Hazard(Entity):

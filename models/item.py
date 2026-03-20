@@ -1,6 +1,6 @@
 from enums.rarity import Rarity
 from enums.type import Type
-from entity import Entity
+from models.entity import Entity
 from enums.entity_type import EntityType
 
 class Item(Entity):

@@ -1,6 +1,6 @@
 from models.npc import NPC
 from enums.entity_type import EntityType
-from item import Item
+from models.item import Item
 
 class Vendor(NPC):
     def __init__(self, name, type: EntityType):

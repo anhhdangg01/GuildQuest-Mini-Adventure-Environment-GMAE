@@ -1,4 +1,4 @@
-from WorldClockTime import WorldClockTime
+from models.world_clock_time import WorldClockTime
 
 
 class Achievement:

@@ -1,4 +1,4 @@
-from inventory import Inventory
+from models.inventory import Inventory
 from enums.character_class import CharacterClass
 import uuid
 
