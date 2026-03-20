@@ -1,10 +1,12 @@
+from abc import ABC, abstractmethod
+
 from models.realm import Realm
 from models.entity import Entity
 from models.rule import Rule
 from models.objective import Objective
 from enums.status import Status
 
-class MiniAdventure():
+class MiniAdventure(ABC):
     def __init__(self, name: str, description: str, realm: Realm, status: Status):
         self.name = name
         self.description = description
@@ -15,6 +17,14 @@ class MiniAdventure():
         self.objectives = {}
         self.status = status
     
+    @abstractmethod
+    def run(self):
+        '''
+        Each child adventure must implement its own game loop logic here.
+        This could be a "while" loop for CLI games or a turn-handler for others.
+        '''
+        pass
+
     def get_name(self) -> str:
         return self.name
     
