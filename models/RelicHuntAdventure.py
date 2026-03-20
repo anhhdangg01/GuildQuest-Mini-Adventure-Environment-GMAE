@@ -80,8 +80,6 @@ class RelicHuntAdventure(MiniAdventure):
 
     def _validate_realm_size(self) -> None:
         total_tiles = self.width * self.height
-
-        # 2 player starts + 2 relics + 3 hazards = 7 minimum tiles
         required_tiles = 7
 
         if total_tiles < required_tiles:
@@ -126,7 +124,7 @@ class RelicHuntAdventure(MiniAdventure):
         )
 
         spike_trap = Hazard("Spike Trap", EntityType.HAZARD, 10.0)
-        wall = Hazard("wall", EntityType.HAZARD, 5.0)
+        wall = Hazard("Wall", EntityType.HAZARD, 5.0)
         pit = Hazard("Pit", EntityType.HAZARD, 12.0)
 
         relics = [relic_1, relic_2]
@@ -176,6 +174,9 @@ class RelicHuntAdventure(MiniAdventure):
             x -= 1
         elif direction == "right" and x < self.width - 1:
             x += 1
+        else:
+            print("Invalid move direction.")
+            return
 
         self.players[player_name]["position"] = [x, y]
         self._check_tile(player_name)
@@ -210,10 +211,10 @@ class RelicHuntAdventure(MiniAdventure):
                 print("Both players win the Co-Op Relic Hunt!")
                 return
         else:
-            for player_name, data in self.players.items():
+            for current_player_name, data in self.players.items():
                 if data["relics"] >= self.target_relics:
                     self.status = Status.WIN
-                    print(f"{player_name} wins Relic Hunt!")
+                    print(f"{current_player_name} wins Relic Hunt!")
                     return
 
         if len(self.relic_positions) == 0:
@@ -253,7 +254,10 @@ class RelicHuntAdventure(MiniAdventure):
                     row.append("[ ]")
             print("".join(row))
 
-        print("Legend: [1]=Player 1  [2]=Player 2  [R]=Relic  [T]=Spike Trap  [W]=Wall  [P]=Pit\n")
+        print(
+            "Legend: [1]=Player 1  [2]=Player 2  [R]=Relic  "
+            "[T]=Spike Trap  [W]=Wall  [P]=Pit\n"
+        )
 
     def get_player_position(self, player_name: str):
         return self.players[player_name]["position"]
