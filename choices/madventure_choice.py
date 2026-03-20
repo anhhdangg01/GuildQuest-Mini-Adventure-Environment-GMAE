@@ -1,6 +1,7 @@
 from choices.choice import Choice
 from models.user import User
 from models.mini_adventure import MiniAdventure
+from models.RelicHuntAdventure import RelicHuntAdventure
 from models.entity import Entity
 from models.rule import Rule
 from models.objective import Objective
@@ -27,6 +28,12 @@ class MAdventureChoice(Choice):
     LOSE = 2
     PROGRESSING = 3
     COMPLETE = 4
+
+    GENERIC_MADVENTURE = 1
+    RELIC_HUNT = 2
+
+    COMPETITIVE = 1
+    COOP = 2
 
     @staticmethod
     def name_in_madventures(name: str, mAdventures: dict) -> bool:
@@ -62,6 +69,18 @@ class MAdventureChoice(Choice):
         print("* (2) Lose")
         print("* (3) Progressing")
         print("* (4) Complete")
+
+    @staticmethod
+    def print_madventure_type_choices() -> None:
+        print("> What kind of mini-adventure do you want to create?")
+        print("* (1) Generic mini-adventure")
+        print("* (2) Relic Hunt")
+
+    @staticmethod
+    def print_relic_hunt_mode_choices() -> None:
+        print("> What mode do you want for Relic Hunt?")
+        print("* (1) Competitive")
+        print("* (2) Co-op")
 
     @staticmethod
     def print_mini_adventures(choiceUI) -> None:
@@ -102,8 +121,7 @@ class MAdventureChoice(Choice):
                     case MAdventureChoice.CHANGE_STATUS:
                         MAdventureChoice.change_status(user)
                     case MAdventureChoice.JOIN_MADVENTURE:
-                        MAdventureChoice.print_mini_adventures(choiceUI)
-                        pass
+                        MAdventureChoice.play_madventure(choiceUI, user)
                     case MAdventureChoice.QUEST_EVENTS:
                         print("> Type an existing mini-adventure:")
                         mAdventure = Choice.getStringInput()
@@ -141,7 +159,24 @@ class MAdventureChoice(Choice):
         
         realm = realms[realm_str]
 
-        mAdventure = MiniAdventure(name, description, realm, Status.PROGRESSING)
+        MAdventureChoice.print_madventure_type_choices()
+        madventure_type = Choice.getIntInput()
+
+        if (madventure_type == MAdventureChoice.GENERIC_MADVENTURE):
+            mAdventure = MiniAdventure(name, description, realm, Status.PROGRESSING)
+        elif (madventure_type == MAdventureChoice.RELIC_HUNT):
+            MAdventureChoice.print_relic_hunt_mode_choices()
+            mode_choice = Choice.getIntInput()
+
+            mode = "competitive"
+            if (mode_choice == MAdventureChoice.COOP):
+                mode = "coop"
+
+            mAdventure = RelicHuntAdventure(name, description, realm, target_relics=2, mode=mode)
+        else:
+            print("> Invalid mini-adventure type!\n")
+            return
+
         user.createMAdventure(name, mAdventure)
         mAdventures[name] = mAdventure
 
@@ -275,3 +310,21 @@ class MAdventureChoice(Choice):
                 return
 
         print("> Mini-adventure status updated!\n")
+
+    @staticmethod
+    def play_madventure(choiceUI, user: User) -> None:
+        MAdventureChoice.print_mini_adventures(choiceUI)
+
+        print("> Type the name of the mini-adventure you want to join:")
+        name = Choice.getStringInput()
+
+        if (not MAdventureChoice.name_in_madventures(name, user.getMAdventures())):
+            print("> That mini-adventure does not exist!\n")
+            return
+
+        adventure = user.getMAdventures()[name]
+
+        if (isinstance(adventure, RelicHuntAdventure)):
+            adventure.play()
+        else:
+            print("> That mini-adventure is not playable yet.\n")
