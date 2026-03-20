@@ -5,7 +5,9 @@ from models.objective import Objective
 from enums.status import Status
 
 class MiniAdventure():
-    def __init__(self, realm: Realm, status: Status):
+    def __init__(self, name: str, description: str, realm: Realm, status: Status):
+        self.name = name
+        self.description = description
         self.realm = realm
         self.quest_events = {}
         self.entities = {}
@@ -13,6 +15,12 @@ class MiniAdventure():
         self.objectives = {}
         self.status = status
     
+    def get_name(self) -> str:
+        return self.name
+    
+    def get_description(self) -> str:
+        return self.description
+
     def change_realm(self, realm: Realm) -> None:
         self.realm = realm
 

@@ -1,4 +1,5 @@
 from models.entity import Entity
+from models.realm import Realm
 from enums.status import Status
 from models.achievement import Achievement
 
@@ -31,6 +32,11 @@ class User:
 
     def get_quest_events(self) -> dict:
         return self.quest_events
+    
+    def change_realm(self, mAdventure: str, realm: Realm) -> None:
+        mAdventures = self.getMAdventures()
+        ma = mAdventures[mAdventure]
+        ma.change_realm(realm)
     
     def add_quest_event(self, title, quest_event) -> None:
         self.quest_events[title] = quest_event

@@ -44,7 +44,7 @@ class MAdventureChoice(Choice):
         print("* (5) Add rule to mini-adventure")
         print("* (6) Add objective mini-adventure")
         print("* (7) Change status of mini-adventure")
-        print("* (8) Join mini-adventure (WIP)")
+        print("* (8) Join mini-adventure")
         print("* (9) Quest events")
         print("* (10) Return")
 
@@ -64,6 +64,18 @@ class MAdventureChoice(Choice):
         print("* (4) Complete")
 
     @staticmethod
+    def print_mini_adventures(choiceUI) -> None:
+        mAdventures = choiceUI.userData.mAdventures
+        
+        print("\n=== GuildQuest Mini-Adventure Menu ===")
+        if (not mAdventures):
+            print("There are currently no mini-adventures.")
+
+        for i, (name, adventure) in enumerate(mAdventures.items()):
+            print(f"({i}) {name} - {adventure.get_description()}")
+        print("======================================")
+
+    @staticmethod
     def get_madventure_choice(choiceUI, user: User) -> None:
         MAdventureChoice.print_madventure_choices()
         choice = Choice.getStringInput()
@@ -72,11 +84,15 @@ class MAdventureChoice(Choice):
             while(int(choice) != MAdventureChoice.RETURN):
                 match (int(choice)):
                     case MAdventureChoice.ADD_MADVENTURE:
-                        MAdventureChoice.add_madventure(choiceUI.userData.realms, user)
+                        mAdventures = choiceUI.userData.mAdventures
+                        realms = choiceUI.userData.realms
+                        MAdventureChoice.add_madventure(mAdventures, realms, user)
                     case MAdventureChoice.REMOVE_MADVENTURE:
-                        MAdventureChoice.remove_madventure(user)
+                        mAdventures = choiceUI.userData.mAdventures
+                        MAdventureChoice.remove_madventure(mAdventures, user)
                     case MAdventureChoice.CHANGE_REALM:
-                        MAdventureChoice.change_realm(choiceUI.userData.realms, user)
+                        realms = choiceUI.userData.realms
+                        MAdventureChoice.change_realm(realms, user)
                     case MAdventureChoice.ADD_ENTITY:
                         MAdventureChoice.add_entity(user)
                     case MAdventureChoice.ADD_RULE:
@@ -86,6 +102,7 @@ class MAdventureChoice(Choice):
                     case MAdventureChoice.CHANGE_STATUS:
                         MAdventureChoice.change_status(user)
                     case MAdventureChoice.JOIN_MADVENTURE:
+                        MAdventureChoice.print_mini_adventures(choiceUI)
                         pass
                     case MAdventureChoice.QUEST_EVENTS:
                         print("> Type an existing mini-adventure:")
@@ -104,13 +121,16 @@ class MAdventureChoice(Choice):
             print("> Your input is not a number!\n")
 
     @staticmethod
-    def add_madventure(realms: dict, user: User) -> None:
+    def add_madventure(mAdventures: dict, realms: dict, user: User) -> None:
         print("> Please enter your mini-adventure name:")
         name = Choice.getStringInput()
 
         if (MAdventureChoice.name_in_madventures(name, user.getMAdventures())):
             print("> That mini-adventure already exists!\n")
             return
+        
+        print("> Please enter a description (press enter if you want it blank):")
+        description = Choice.getStringInput()
         
         print("> Please choose the realm you want your mini-adventure to take place in: ")
 
@@ -121,18 +141,20 @@ class MAdventureChoice(Choice):
         
         realm = realms[realm_str]
 
-        mAdventure = MiniAdventure(realm, Status.PROGRESSING)
+        mAdventure = MiniAdventure(name, description, realm, Status.PROGRESSING)
         user.createMAdventure(name, mAdventure)
+        mAdventures[name] = mAdventure
 
         print("> Mini adventure added! Change more details about it in the menu!\n")
     
     @staticmethod
-    def remove_madventure(user: User) -> None:
+    def remove_madventure(mAdventures: dict, user: User) -> None:
         print("> What is the name of the mini-adventure you want to remove?")
         name = Choice.getStringInput()
 
         if (name in user.getMAdventures()):
             user.removeMAdventure(name)
+            mAdventures.pop(name)
             print("> Mini-adventure removed!\n")
         else:
             print("> That mini-adventure does not exist!\n")
@@ -140,20 +162,23 @@ class MAdventureChoice(Choice):
     @staticmethod
     def change_realm(realms: dict, user: User) -> None:
         print("> What is the name of the mini-adventure you want to edit?")
-        name = Choice.getStringInput()
+        mAdventure_name = Choice.getStringInput()
 
-        if (not MAdventureChoice.name_in_madventures(name, user.getMAdventures())):
+        if (not MAdventureChoice.name_in_madventures(mAdventure_name, user.getMAdventures())):
             print("> That mini-adventure does not exist!\n")
             return
 
         print("> Which realm do you want to select?")
-        realm = Choice.getStringInput()
+        realm_str = Choice.getStringInput()
 
-        if (realm not in realms):
+        if (realm_str not in realms):
             print("> That realm does not exist!\n")
             return
         
-        print("> Realm changed!")
+        realm = realms[realm_str]
+        user.change_realm(mAdventure_name, realm)
+        
+        print("> Realm changed!\n")
         
     @staticmethod
     def add_entity(user: User) -> None:
@@ -219,7 +244,7 @@ class MAdventureChoice(Choice):
         print("> Please state an objective: ")
         objective_desc = Choice.getStringInput()
 
-        objective = Rule(objective_name, objective_desc)
+        objective = Objective(objective_name, objective_desc)
         user.add_rule(mAdventure_name, objective)
 
         print("> Objective added!\n")
