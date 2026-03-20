@@ -7,7 +7,7 @@ class MiniAdventureMenu:
 
     def remove_adventure(self, adventure: MiniAdventure) -> bool:
         if adventure in self.adventures:
-            self.adventures.remove(self.adventure)
+            self.adventures.remove(adventure)
             return True
         return False
     
