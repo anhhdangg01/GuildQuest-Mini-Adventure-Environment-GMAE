@@ -66,13 +66,15 @@ class MAdventureChoice(Choice):
     @staticmethod
     def print_mini_adventures(choiceUI) -> None:
         mAdventures = choiceUI.userData.mAdventures
+        counter = 1
         
         print("\n=== GuildQuest Mini-Adventure Menu ===")
         if (not mAdventures):
             print("There are currently no mini-adventures.")
 
-        for i, (name, adventure) in enumerate(mAdventures.items()):
-            print(f"({i}) {name} - {adventure.get_description()}")
+        for (name, adventure) in enumerate(mAdventures.items()):
+            print(f"({counter}) {name} - {adventure.get_description()}")
+            counter += 1
         print("======================================")
 
     @staticmethod
@@ -141,9 +143,9 @@ class MAdventureChoice(Choice):
         
         realm = realms[realm_str]
 
-        mAdventure = MiniAdventure(name, description, realm, Status.PROGRESSING)
-        user.createMAdventure(name, mAdventure)
-        mAdventures[name] = mAdventure
+        # mAdventure = MiniAdventure(name, description, realm, Status.PROGRESSING)
+        # user.createMAdventure(name, mAdventure)
+        # mAdventures[name] = mAdventure
 
         print("> Mini adventure added! Change more details about it in the menu!\n")
     
@@ -275,3 +277,23 @@ class MAdventureChoice(Choice):
                 return
 
         print("> Mini-adventure status updated!\n")
+
+    @staticmethod
+    def join_madventure(choiceUI) -> None:
+        mAdventures = choiceUI.userData.mAdventures
+        MAdventureChoice.print_mini_adventures()
+        choice = input("Choose a mini-adventure (choose by number or the name): ").strip()
+        print("> Press 0 to exit.")
+
+        while (choice == "0"):
+            if choice.isdigit():
+                index = int(choice) - 1
+                if 0 <= index < len(mAdventures):
+                    list(mAdventures.values())[index].run()
+                else:
+                    print("> Invalid choice! Please try again.\n")
+            else:
+                if (choice in mAdventures):
+                    mAdventures[choice].run()
+                else:
+                    print("> Invalid choice! Please try again.\n")
