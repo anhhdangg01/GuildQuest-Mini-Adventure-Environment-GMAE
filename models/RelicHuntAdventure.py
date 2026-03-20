@@ -13,11 +13,13 @@ from enums.type import Type
 class RelicHuntAdventure(MiniAdventure):
     def __init__(
         self,
+        name: str,
+        description: str,
         realm: Realm,
         target_relics: int = 2,
         mode: str = "competitive"
     ):
-        super().__init__(realm, Status.PROGRESSING)
+        super().__init__(name, description, realm, Status.PROGRESSING)
 
         self.mode = mode.lower()
         self.name = "Relic Hunt"
