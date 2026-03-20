@@ -52,9 +52,6 @@ class RelicHuntAdventure(MiniAdventure):
         self._validate_realm_size()
         self._setup_entities()
 
-    def run(self):
-        self.play()
-
     def get_name(self) -> str:
         if self.mode == "coop":
             return f"{self.name} (Co-Op)"
@@ -250,7 +247,7 @@ class RelicHuntAdventure(MiniAdventure):
             print(f"  Team relic total: {self.team_relics}/{self.target_relics}")
         print()
 
-    def play(self) -> None:
+    def run(self) -> None:
         self.reset()
 
         print(f"\n=== {self.get_name()} ===")

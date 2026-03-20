@@ -2,6 +2,7 @@ from choices.choice import Choice
 from models.user import User
 from models.mini_adventure import MiniAdventure
 from models.RelicHuntAdventure import RelicHuntAdventure
+from models.escort_adventure import EscortAdventure
 from models.entity import Entity
 from models.rule import Rule
 from models.objective import Objective
@@ -31,6 +32,7 @@ class MAdventureChoice(Choice):
 
     GENERIC_MADVENTURE = 1
     RELIC_HUNT = 2
+    ROYAL_ESCORT = 3
 
     COMPETITIVE = 1
     COOP = 2
@@ -75,6 +77,7 @@ class MAdventureChoice(Choice):
         print("> What kind of mini-adventure do you want to create?")
         print("* (1) Generic mini-adventure")
         print("* (2) Relic Hunt")
+        print("* (3) Royal Escort")
 
     @staticmethod
     def print_relic_hunt_mode_choices() -> None:
@@ -176,6 +179,8 @@ class MAdventureChoice(Choice):
                 mode = "coop"
 
             mAdventure = RelicHuntAdventure(name, description, realm, target_relics=2, mode=mode)
+        elif (madventure_type == MAdventureChoice.ROYAL_ESCORT):
+            mAdventure = EscortAdventure(name, description, realm)
         else:
             print("> Invalid mini-adventure type!\n")
             return
@@ -210,7 +215,7 @@ class MAdventureChoice(Choice):
 
         adventure = user.getMAdventures()[name]
 
-        if (isinstance(adventure, RelicHuntAdventure)):
-            adventure.play()
+        if (isinstance(adventure, RelicHuntAdventure) or isinstance(adventure, EscortAdventure)):
+            adventure.run()
         else:
             print("> That mini-adventure is not playable yet.\n")
