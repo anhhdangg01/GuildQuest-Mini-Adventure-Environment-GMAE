@@ -66,7 +66,6 @@ class MAdventureChoice(Choice):
             print("There are currently no mini-adventures.")
 
         for name, adventure in mAdventures.items():
-            print(name, adventure)
             print(f"({counter}) {name} - {adventure.get_description()}")
             counter += 1
         print("======================================")

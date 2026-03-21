@@ -300,7 +300,7 @@ class RelicHuntAdventure(MiniAdventure):
             "name": self.get_name(),
             "description": self.get_description(),
             "mode": self.mode,
-            "realm": self.realm.get_name(),
+            "realm": self.realm.name,
             "status": self.status.name,
             "current_player": self.get_current_player(),
             "players": self.players,
