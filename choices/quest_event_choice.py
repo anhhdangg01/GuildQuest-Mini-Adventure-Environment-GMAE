@@ -1,7 +1,7 @@
 from choices.choice import Choice
 from models.world_clock_time import WorldClockTime
 from models.quest_event import QuestEvent
-from models.mini_adventure import MiniAdventure
+from adventures.mini_adventure import MiniAdventure
 import uuid
 
 class QuestEventChoice(Choice):

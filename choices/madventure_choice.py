@@ -1,12 +1,8 @@
 from choices.choice import Choice
 from models.user import User
-from models.mini_adventure import MiniAdventure
-from models.RelicHuntAdventure import RelicHuntAdventure
-from models.escort_adventure import EscortAdventure
-from models.entity import Entity
-from models.rule import Rule
-from models.objective import Objective
-from enums.entity_type import EntityType
+from adventures.mini_adventure import MiniAdventure
+from adventures.relic_hunt_adventure import RelicHuntAdventure
+from adventures.escort_adventure import EscortAdventure
 from enums.status import Status
 
 class MAdventureChoice(Choice):

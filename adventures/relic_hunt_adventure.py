@@ -1,6 +1,6 @@
 import random
 
-from models.mini_adventure import MiniAdventure
+from adventures.mini_adventure import MiniAdventure
 from models.realm import Realm
 from models.item import Item
 from models.hazard import Hazard
