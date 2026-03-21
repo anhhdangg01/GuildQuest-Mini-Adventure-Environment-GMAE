@@ -1,6 +1,5 @@
 from models.world_clock_time import WorldClockTime
 
-
 class Achievement:
     def __init__(self, name: str, description: str, time_unlocked: WorldClockTime):
         self.name = name

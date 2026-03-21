@@ -11,7 +11,8 @@ class QuestEventChoice(Choice):
     RETURN = 4
 
     @staticmethod
-    def print_quest_event_choices() -> None:
+    def print_quest_event_choices(mAdventure: MiniAdventure) -> None:
+        QuestEventChoice.list_quest_events(mAdventure)
         print("> What would you like to do with your quest events? Type the number:")
         print("* (1) Add a new quest event")
         print("* (2) Remove an existing quest event")
@@ -19,8 +20,23 @@ class QuestEventChoice(Choice):
         print("* (4) Return")
 
     @staticmethod
+    def list_quest_events(mAdventure: MiniAdventure) -> None:
+        print("\n=== Quest Events ===")
+        events = mAdventure.get_quest_events()
+        if not events:
+            print("No quest events currently scheduled.")
+        else:
+            for title, event in events.items():
+                status = "ACTIVE" if event.is_active() else ("ENDED" if event.is_ended() else "WAITING")
+                time_range = f"{event.startTime}"
+                if event.endTime:
+                    time_range += f" - {event.endTime}"
+                print(f"* [{status}] {title} ({time_range})")
+        print("====================\n")
+
+    @staticmethod
     def get_quest_event_choice(mAdventure: MiniAdventure) -> None:
-        QuestEventChoice.print_quest_event_choices()
+        QuestEventChoice.print_quest_event_choices(mAdventure)
         choice = Choice.getStringInput()
 
         try:
@@ -35,7 +51,7 @@ class QuestEventChoice(Choice):
                     case _:
                         print("> Invalid input! Try again!\n")
 
-                QuestEventChoice.print_quest_event_choices()
+                QuestEventChoice.print_quest_event_choices(mAdventure)
                 choice = Choice.getStringInput()
         except ValueError:
             print("> Your input is not a number!\n")

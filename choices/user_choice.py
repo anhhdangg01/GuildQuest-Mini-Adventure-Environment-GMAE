@@ -1,5 +1,6 @@
 from choices.choice import Choice
 from models.user import User
+from models.world_clock import WorldClock
 import uuid
 
 class UserChoice(Choice):
@@ -10,6 +11,8 @@ class UserChoice(Choice):
 
     @staticmethod
     def printUserChoices() -> None:
+        clock = WorldClock()
+        print(f"\n--- {clock.format_time()} ---")
         print("> What would you like to do? Type the number of one of the following:")
         print("* (1) Mini Adventures (add a realm first!)")
         print("* (2) Characters")
